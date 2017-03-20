@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>  
+<beans xmlns="http://www.springframework.org/schema/beans"  
+   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"   
+   xmlns:context="http://www.springframework.org/schema/context"  
+   xmlns:cxf="http://cxf.apache.org/core"   
+   xmlns:jaxws="http://cxf.apache.org/jaxws"  
+   xmlns:jaxrs="http://cxf.apache.org/jaxrs"  
+   xsi:schemaLocation="http://www.springframework.org/schema/beans  
+        http://www.springframework.org/schema/beans/spring-beans-2.5.xsd  
+        http://www.springframework.org/schema/context  
+        http://www.springframework.org/schema/context/spring-context-2.5.xsd  
+        http://cxf.apache.org/core  
+        http://cxf.apache.org/schemas/core.xsd  
+        http://cxf.apache.org/jaxws  
+        http://cxf.apache.org/schemas/jaxws.xsd  
+        http://cxf.apache.org/jaxrs  
+        http://cxf.apache.org/schemas/jaxrs.xsd">  
+  
+   <!--Apache CXF -->  
+   <import resource="classpath:META-INF/cxf/cxf.xml" />
+   
+   <jaxrs:server id="cepService" address="/rest">  
+      <jaxrs:serviceBeans>  
+         <ref bean="cepServiceImpl" />  
+      </jaxrs:serviceBeans>  
+      <jaxrs:providers>  
+         <ref bean="CepExceptionMapper" />
+         <ref bean="jsonProvider" />
+      </jaxrs:providers>
+   </jaxrs:server>  
+       
+   <bean id="CepExceptionMapper" class="br.com.weservices.cep.exception.CepExceptionMapper"/>  
+   
+   <bean id="cepServiceImpl" class="br.com.weservices.cep.service.CepServiceImpl">
+      <property name="enderecoDao" ref="enderecoDAO" />
+   </bean>
+   
+   <bean id="enderecoDAO" class="br.com.weservices.cep.dao.EnderecoDAO">  
+      <property name="enderecos">  
+         <list>  
+            <ref bean="endereco1" />  
+            <ref bean="endereco2" />  
+            <ref bean="endereco3" />  
+         </list>  
+      </property>  
+   </bean>  
+     
+   <bean id="endereco1" class="br.com.weservices.cep.domain.Endereco">  
+      <property name="id" value="1" />
+      <property name="cep" value="09112000" />  
+      <property name="rua" value="Rua Silla Nallon Gonzaga" />
+      <property name="bairro" value="Parque Marajoara" />
+      <property name="cidade" value="Santo André" />
+      <property name="estado" value="São Paulo" />
+   </bean>
+   <bean id="endereco2" class="br.com.weservices.cep.domain.Endereco">  
+      <property name="id" value="2" />
+      <property name="cep" value="09112100" />  
+      <property name="rua" value="Avenida Batista Pirelli" />
+      <property name="bairro" value="Homero Thon" />
+      <property name="cidade" value="Santo André" />
+      <property name="estado" value="São Paulo" />
+   </bean>
+   <bean id="endereco3" class="br.com.weservices.cep.domain.Endereco">  
+      <property name="id" value="3" />
+      <property name="cep" value="09112200" />  
+      <property name="rua" value="Rua Caravelas" />
+      <property name="bairro" value="Vila Pires" />
+      <property name="cidade" value="Santo André" />
+      <property name="estado" value="São Paulo" />
+   </bean>
+   
+   <bean id="jsonProvider" class="org.apache.cxf.jaxrs.provider.json.JSONProvider" />
+   
+</beans>
